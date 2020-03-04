@@ -30,7 +30,7 @@ namespace ecom_aspNetCoreMvc
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-
+            services.AddSession();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
@@ -48,6 +48,7 @@ namespace ecom_aspNetCoreMvc
 
             app.UseStaticFiles();
             app.UseCookiePolicy();
+            app.UseSession();
 
             app.UseMvc(routes =>
             {

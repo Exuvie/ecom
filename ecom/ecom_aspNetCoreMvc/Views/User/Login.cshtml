@@ -1,0 +1,115 @@
+﻿
+@{
+    ViewData["Title"] = "Login";
+}
+
+@if (ViewBag.Logged == true)
+{
+    <div class="alert alert-primary text-center alertDejaConnecter" role="alert">
+        <p>Vous êtes déjà inscrit.</p>
+        <p>Veuillez vous déconnecter pour créer une nouvelle inscription.</p>
+    </div>
+}
+else
+{
+    <div class="Inscription">
+        <div class="text-center">
+            <h2>Inscrivez-vous !</h2>
+        </div>
+        <div class="row">
+            <div class="col">
+                @if ((ViewBag.errors != null))
+                {
+                    if ((ViewBag.errors as List<string>).Count > 0)
+                    {
+                        <div class="row">
+                            <div class="col-lg-12 alert alert-secondary text-center" role="alert">
+                                @foreach (string e in (ViewBag.errors as List<string>))
+                                {
+                                    <div class="col-lg-12">
+                                        @e
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+                }
+
+                @if (ViewBag.inscription != null)
+                {
+                    if (ViewBag.inscription)
+                    {
+                        <div class="row">
+                            <div class="col-lg-12 alert alert-primary text-center" role="alert">
+                                @ViewBag.validation
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+
+        <form asp-controller="User" asp-action="Register" method="post">
+            <div class="container">
+                <div class="row">
+                    <div class="col m-1">
+                        <input value="@Model.LastName" name="LastName" type="text" placeholder="Nom" class="form-control text-center" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col m-1">
+                        <input value="@Model.FirstName" name="FirstName" type="text" placeholder="Prénom" class="form-control text-center" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col m-1">
+                        <input value="@Model.UserName" name="UserName" type="text" placeholder="Nom d'utilisateur" class="form-control text-center" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col m-1">
+                        <input value="@Model.Phone" name="Phone" type="text" placeholder="Téléphone" class="form-control text-center" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col m-1">
+                        <input value="@Model.Email" name="Email" type="text" placeholder="Email" class="form-control text-center" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col m-1">
+                        <input value="@Model.Address" name="Address" type="text" placeholder="Adresse" class="form-control text-center" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col m-1">
+                        <input value="@Model.Zip" name="Zip" type="text" placeholder="Code postal" class="form-control text-center" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col m-1">
+                        <input value="@Model.City" name="City" type="text" placeholder="Ville" class="form-control text-center" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col m-1">
+                        <input value="@Model.Password" name="Password" type="password" placeholder="Mot de passe" class="form-control text-center" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 m-1">
+                        <input type="password" name="cPassword" placeholder="Confirmation mot de passe" class="form-control text-center" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col m-1">
+                        <button class="btn btn-secondary btn-lg btn-block btnInscription" type="submit">Valider</button>
+                    </div>
+                </div>
+            </div>          
+        </form>
+    </div>
+}
+
+
+

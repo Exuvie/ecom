@@ -1,0 +1,23 @@
+﻿
+@{
+    ViewData["Title"] = "Admin";
+}
+
+<section id="admin">
+    <div class="container">
+        <h1>Section Administrateur</h1>
+        <div>
+            <a asp-controller="Article" asp-action="">Ajouter un article</a>
+        </div>
+        <div>
+            <a asp-controller="Article" asp-action="">Liste des articles</a>
+        </div>
+        <div>
+            <a asp-controller="User" asp-action="UserList">Liste des utilisateurs</a>
+        </div>
+        <div>
+            <a asp-controller="Category" asp-action="">Gestion des catégories</a>
+        </div>
+    </div>
+</section>
+

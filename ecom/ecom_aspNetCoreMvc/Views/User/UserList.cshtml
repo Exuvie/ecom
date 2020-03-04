@@ -1,0 +1,49 @@
+﻿@model List<User>;
+
+<section id="userList">
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <h6>Liste des utilisateurs</h6>
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <thead class="text-center">
+                        <tr>
+                            <th scope="col">Id</th>
+                            <th scope="col">Nom</th>
+                            <th scope="col">Prénom</th>
+                            <th scope="col">Pseudo</th>
+                            <th scope="col">Téléphone</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Adresse</th>
+                            <th scope="col">Code postal</th>
+                            <th scope="col">Ville</th>
+                            <th scope="col">Supprimer</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-center">
+                        @foreach (User u in Model)
+                        {
+                        <tr>
+                            <td>@u.Id</td>
+                            <td>@u.LastName</td>
+                            <td>@u.FirstName</td>
+                            <td>@u.UserName</td>
+                            <td>@u.Phone</td>
+                            <td>@u.Email</td>
+                            <td>@u.Address</td>
+                            <td>@u.Zip</td>
+                            <td>@u.City</td>
+                            <td>
+                                <a asp-controller="User" asp-action="UserDelete" asp-route-id="@u.Id">X</a>
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+

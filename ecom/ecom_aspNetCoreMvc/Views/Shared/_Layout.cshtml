@@ -6,6 +6,7 @@
     <title>@ViewData["Title"] - ecom_aspNetCoreMvc</title>
 
     <environment include="Development">
+        <link rel="stylesheet" href="~/lib/jquery/dist/jquery.js" />
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
     </environment>
     <environment exclude="Development">
@@ -21,7 +22,7 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">ecom_aspNetCoreMvc</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Ecom</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -29,12 +30,46 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="">Nos bières</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="">Contact</a>
                         </li>
+                        @if (ViewBag.UserName == "Admin")
+                        {
+                            <li class="nav-item active">
+                                <a class="nav-link" asp-controller="Home" asp-action="Admin">Admin<span class="sr-only">(current)</span></a>
+                            </li>
+                        }
+                        <li class="nav-item">
+                            <a asp-controller="User" asp-action="Login" class="nav-link">S'inscrire</a>
+                        </li>
+                        @if (ViewBag.logged == true && ViewBag.UserName != "Admin")
+                        {
+                            <li>
+                                <button type="button" class="btn btn-primary">
+                                    Panier <span class="badge badge-light">4</span>
+                                </button>
+                            </li>
+                        }
                     </ul>
+                </div>
+                <div id="connect">
+                    @if (ViewBag.Logged == true)
+                    {
+                        <form asp-controller="User" asp-action="LogOut" class="form-inline my-2 my-lg-0">
+                            <label class="mr-2"><strong>Welcome @ViewBag.UserName</strong></label>
+                            <button class="btn btn-outline-warning my-2 my-sm-0" type="submit">Se déconnecter</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <form asp-controller="User" asp-action="LoginPost" class="form-inline my-2 my-lg-0">
+                            <input name="Email" class="form-control mr-sm-2" type="text" placeholder="Email" aria-label="Search">
+                            <input name="Password" class="form-control mr-sm-2" type="password" placeholder="Password" aria-label="Search">
+                            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Se connecter</button>
+                        </form>
+                    }
                 </div>
             </div>
         </nav>
