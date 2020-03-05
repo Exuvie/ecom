@@ -5,19 +5,23 @@
 
 <section id="admin">
     <div class="container">
-        <h1>Section Administrateur</h1>
-        <div>
-            <a asp-controller="Article" asp-action="">Ajouter un article</a>
+        <div class="text-center">
+            <h4>Section Administrateur</h4>
         </div>
-        <div>
-            <a asp-controller="Article" asp-action="">Liste des articles</a>
+        <div class="">
+            <ul class="nav justify-content-center">
+                <li class="nav-item">
+                    <a asp-controller="Category" asp-action="CategoryAdmin" class="nav-link">Gestion des catégories</a>
+                </li>
+                <li class="nav-item">
+                    <a asp-controller="Article" asp-action="" class="nav-link">Gestion des articles</a>
+                </li>
+                <li class="nav-item">
+                    <a asp-controller="User" asp-action="UserList" class="nav-link">Gestion des utilisateurs</a>
+                </li>
+            </ul>
         </div>
-        <div>
-            <a asp-controller="User" asp-action="UserList">Liste des utilisateurs</a>
-        </div>
-        <div>
-            <a asp-controller="Category" asp-action="">Gestion des catégories</a>
-        </div>
+        
     </div>
 </section>
 

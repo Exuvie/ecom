@@ -1,0 +1,106 @@
+﻿
+@{
+    ViewData["Title"] = "CategoryAdmin";
+}
+@model List<Category>;
+
+<section id="admin" class="m-4">
+    <div class="container">
+        <div class="text-center">
+            <h4>Section Administrateur</h4>
+        </div>
+        <div class="">
+            <ul class="nav justify-content-center">
+                <li class="nav-item">
+                    <a asp-controller="Category" asp-action="" class="nav-link">Gestion des catégories</a>
+                </li>
+                <li class="nav-item">
+                    <a asp-controller="Article" asp-action="" class="nav-link">Ajouter un article</a>
+                </li>
+                <li class="nav-item">
+                    <a asp-controller="Article" asp-action="" class="nav-link">Liste des articles</a>
+                </li>
+                <li class="nav-item">
+                    <a asp-controller="User" asp-action="UserList" class="nav-link">Liste des utilisateurs</a>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+</section>
+
+<section class="m-4">
+    <div class="container">
+        @if ((ViewBag.errors != null))
+        {
+            <div class="alert alert-danger text-center" role="alert">
+                <div>
+                    @ViewBag.errors
+                </div>
+            </div>
+        }
+
+        @if (ViewBag.validation != null)
+        {
+            <div class="alert alert-warning text-center" role="alert">
+                <div class="">
+                    @ViewBag.validation
+                </div>
+            </div>
+        }
+    </div>
+</section>
+
+<section class="m-4">
+    <div class="container">
+        <div class="card">
+            <div class="card-header text-center">
+                <h6>Ajouter une catégorie</h6>
+            </div>
+            <form asp-controller="Category" asp-action="CategoryRegister" method="post">
+                <div class="row">
+                    <div class="col mb-3 mt-3 ml-3">
+                        <input name="title" type="text" class="form-control" placeholder="Nom de la catégorie à ajouter">
+                    </div>
+                    <div class="col mb-3 mt-3 mr-3">
+                        <button class="btn btn-primary btn-block" type="submit">Valider</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+<section class="m-4">
+    <div class="container">
+        <div class="card">
+            <div class="card-header text-center">
+                <h6>Liste des catégories</h6>
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <thead class="text-center">
+                        <tr>
+                            <th scope="col">ID Catégorie</th>
+                            <th scope="col">Intitulé</th>
+                            <th scope="col">Supprimer</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-center">
+                        @foreach (Category c in Model)
+                        {
+                            <tr>
+                                <td>@c.Id</td>
+                                <td>@c.Title</td>
+                                <td>
+                                    <a asp-controller="Category" asp-action="RemoveCategory" asp-route-id="@c.Id">X</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
