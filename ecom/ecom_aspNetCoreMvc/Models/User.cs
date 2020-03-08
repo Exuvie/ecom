@@ -174,6 +174,36 @@ namespace ecom_aspNetCoreMvc.Models
             return users;
         }
 
+        public static List<User> GetUserByLastName(string lastName)
+        {
+            //User u = null;
+            List<User> users = new List<User>();
+            command = new SqlCommand("SELECT * FROM Users WHERE lastName LIKE @lastName", DataBase.Instance.connection);
+            command.Parameters.Add(new SqlParameter("@lastName", "%" + lastName + "%"));
+            DataBase.Instance.connection.Open();
+            reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                User u = new User
+                {
+                    Id = reader.GetInt32(0),
+                    LastName = reader.GetString(1),
+                    FirstName = reader.GetString(2),
+                    UserName = reader.GetString(3),
+                    Phone = reader.GetString(4),
+                    Email = reader.GetString(5),
+                    Address = reader.GetString(6),
+                    Zip = reader.GetInt32(7),
+                    City = reader.GetString(8)
+                };
+                users.Add(u);
+            }
+            reader.Close();
+            command.Dispose();
+            DataBase.Instance.connection.Close();
+            return users;
+        }
+
         public static void DeleteUser(User u)
         {
             request = "DELETE FROM Users WHERE id = @id";

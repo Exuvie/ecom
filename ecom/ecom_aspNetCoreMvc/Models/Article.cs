@@ -12,10 +12,10 @@ namespace ecom_aspNetCoreMvc.Models
         private int id;
         private string title;
         private string description;
-        private decimal price;
+        private decimal? price;
         private DateTime addedDate;
         private string urlImage;
-        private int idCategory;
+        private int? idCategory;
 
         private static string request;
         private static SqlCommand command;
@@ -24,12 +24,16 @@ namespace ecom_aspNetCoreMvc.Models
         public int Id { get => id; set => id = value; }
         public string Title { get => title; set => title = value; }
         public string Description { get => description; set => description = value; }
-        public decimal Price { get => price; set => price = value; }
+        public decimal? Price { get => price; set => price = value; }
         public DateTime AddedDate { get => addedDate; set => addedDate = value; }
         public string UrlImage { get => urlImage; set => urlImage = value; }
-        public int IdCategory { get => idCategory; set => idCategory = value; }
+        public int? IdCategory { get => idCategory; set => idCategory = value; }
 
-        public bool AddArticle(Article a)
+        public Article()
+        {
+        }
+
+        public void AddArticle(Article a)
         {
             request = "INSERT INTO Article (title, description, price, addDate, urlImage, idCategory) OUTPUT INSERTED.ID VALUES (@title, @description, @price, @addDate, @urlImage, @idCategory)";
             command = new SqlCommand(request, DataBase.Instance.connection);
@@ -43,10 +47,9 @@ namespace ecom_aspNetCoreMvc.Models
             a.Id = (int)command.ExecuteScalar();
             command.Dispose();
             DataBase.Instance.connection.Close();
-            return Id > 0;
         }
 
-        public static List<Article> GetArticles(int? idCategory)
+        public static List<Article> GetArticleByCategory(int? idCategory)
         {
             List<Article> articles = new List<Article>();
             if (idCategory == null)
@@ -108,6 +111,35 @@ namespace ecom_aspNetCoreMvc.Models
             DataBase.Instance.connection.Close();
             return a;
         }
+
+        public static List<Article> GetArticles()
+        {
+            List<Article> articles = new List<Article>();
+            request = "SELECT id, title, description, price, addDate, urlImage, idCategory FROM Article";
+            command = new SqlCommand(request, DataBase.Instance.connection);
+            DataBase.Instance.connection.Open();
+            reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                Article a = new Article
+                {
+                    Id = reader.GetInt32(0),
+                    Title = reader.GetString(1),
+                    Description = reader.GetString(2),
+                    Price = reader.GetDecimal(3),
+                    AddedDate = reader.GetDateTime(4),
+                    urlImage = reader.GetString(5),
+                    IdCategory = reader.GetInt32(6),
+                };
+                articles.Add(a);
+            }
+            reader.Close();
+            command.Dispose();
+            DataBase.Instance.connection.Close();
+            return articles;
+        }
+
+
 
         public static void DeleteArticle(Article a)
         {

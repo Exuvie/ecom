@@ -37,17 +37,13 @@ namespace ecom_aspNetCoreMvc.Controllers
             if (title == null)
             {
                 ViewBag.errors = "Merci de saisir un nom de catégorie";
-                //categories = Category.GetCategories();
-                //return View("CategoryAdmin", categories);
-                //return RedirectToAction("CategoryAdmin");
+                categories = Category.GetCategories();
+                return View("CategoryAdmin", categories);
 
             }
             if (Models.Category.CategoryExist(c))
             {
                 ViewBag.errors = "Catégorie déjà existante !";
-                //categories = Category.GetCategories();
-                //return View("CategoryAdmin", categories);
-                //return RedirectToAction("CategoryAdmin");
             }
             else
             {
@@ -60,9 +56,10 @@ namespace ecom_aspNetCoreMvc.Controllers
 
         public IActionResult RemoveCategory(Category c)
         {
+            string titre = c.Title;
             if (Models.Category.DeleteCategory(c))
             {
-                ViewBag.errors = "La catégorie " + c.Title + "  a été supprimée";
+                ViewBag.validation = "La catégorie " + titre + "  a été supprimée";
             }
             List <Category> categories = Category.GetCategories();
             return View("CategoryAdmin", categories);

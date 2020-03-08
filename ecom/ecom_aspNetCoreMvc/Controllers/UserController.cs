@@ -139,11 +139,33 @@ namespace ecom_aspNetCoreMvc.Controllers
         }
 
         [Route("UserList")]
+        [HttpGet]
         public IActionResult UserList()
         {
             UserConnect(ViewBag);
             List<User> users = Models.User.GetUserList();
-            return View("UserList", users);
+            ViewBag.users = users;
+            return View("UserList");
+        }
+
+        [HttpGet]
+        public IActionResult GetUserByLastName(string lastName)
+        {
+            User u = new User();
+            List<User> users = new List<User>();
+            if (lastName == null)
+            {
+                users = Models.User.GetUserList();
+                ViewBag.users = users;
+            }
+            else
+            {
+                users = new List<User>();
+                users = Models.User.GetUserByLastName(lastName);
+                //users.Add(u);
+                ViewBag.users = users;
+            }
+            return View("UserList");
         }
 
         public IActionResult UserDelete(User u)
@@ -151,7 +173,8 @@ namespace ecom_aspNetCoreMvc.Controllers
             UserConnect(ViewBag);
             Models.User.DeleteUser(u);
             List<User> users = Models.User.GetUserList();
-            return View("UserList", users);
+            ViewBag.users = users;
+            return RedirectToAction("UserList");
         }
     }
 }

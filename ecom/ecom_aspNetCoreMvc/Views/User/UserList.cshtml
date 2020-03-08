@@ -1,4 +1,4 @@
-﻿@model List<User>;
+﻿@model User
 
 <section id="admin" class="m-4">
     <div class="container">
@@ -11,17 +11,13 @@
                     <a asp-controller="Category" asp-action="CategoryAdmin" class="nav-link">Gestion des catégories</a>
                 </li>
                 <li class="nav-item">
-                    <a asp-controller="Article" asp-action="" class="nav-link">Ajouter un article</a>
+                    <a asp-controller="Article" asp-action="ArticleAdmin" class="nav-link">Gestion des articles</a>
                 </li>
                 <li class="nav-item">
-                    <a asp-controller="Article" asp-action="" class="nav-link">Liste des articles</a>
-                </li>
-                <li class="nav-item">
-                    <a asp-controller="User" asp-action="UserList" class="nav-link">Liste des utilisateurs</a>
+                    <a asp-controller="User" asp-action="UserList" class="nav-link">Gestion des utilisateurs</a>
                 </li>
             </ul>
         </div>
-
     </div>
 </section>
 
@@ -30,6 +26,25 @@
         <div class="card">
             <div class="card-header text-center">
                 <h6>Liste des utilisateurs</h6>
+            </div>
+            <div class="card-body">
+                <form asp-controller="User" asp-action="GetUserBylastName" method="get">
+                    <div class="input-group">
+                        <input name="LastName" type="search" class="form-control" placeholder="Nom">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary btn-block" type="submit">Rechercher</button>
+                        </div>
+                    </div>
+
+                    @*<div class="input-group col-8 mb-3">
+                        <div class="input-group-append">
+                            <input name="LastName" type="search" placeholder="Nom" class="form-control text-center" />
+                        </div>
+                        <div class="input-group-append col-4">
+                            <button class="btn btn-outline-secondary" type="submit">Rechercher</button>
+                        </div>
+                    </div>*@
+                </form>
             </div>
             <div class="card-body">
                 <table class="table">
@@ -48,7 +63,7 @@
                         </tr>
                     </thead>
                     <tbody class="text-center">
-                        @foreach (User u in Model)
+                        @foreach (User u in (ViewBag.users as List<User>))
                         {
                             <tr>
                                 <td>@u.Id</td>
