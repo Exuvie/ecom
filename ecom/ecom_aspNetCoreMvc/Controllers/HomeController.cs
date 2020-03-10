@@ -24,12 +24,31 @@ namespace ecom_aspNetCoreMvc.Controllers
         public IActionResult Index()
         {
             UserConnect(ViewBag);
-            return View();
+            List<Article> articles = Article.GetArticles();
+            articles.ForEach(c =>
+            {
+                c.UrlImage = $"{Request.Scheme}://{Request.Host.Value}/{c.UrlImage}";
+            });
+            return View("Index", articles);
         }
 
         public IActionResult Admin()
         {
             UserConnect(ViewBag);
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult ListArticle(int? idCategory)
+        {
+            UserConnect(ViewBag);
+            ViewBag.Category = Category.GetCategories();
+            List<Article> articles = Article.GetArticleByCategory(idCategory);
+            ViewBag.Article = articles;
+            articles.ForEach(a =>
+            {
+                a.UrlImage = $"{Request.Scheme}://{Request.Host.Value}/{a.UrlImage}";
+            });
             return View();
         }
     }

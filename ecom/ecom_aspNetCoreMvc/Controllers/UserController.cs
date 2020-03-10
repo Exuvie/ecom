@@ -17,6 +17,7 @@ namespace ecom_aspNetCoreMvc.Controllers
             {
                 v.Logged = logged;
                 v.UserName = HttpContext.Session.GetString("UserName");
+                v.Id = HttpContext.Session.GetInt32("Id");
             }
         }
 
@@ -54,6 +55,7 @@ namespace ecom_aspNetCoreMvc.Controllers
             {
                 HttpContext.Session.SetString("logged", "true");
                 HttpContext.Session.SetString("UserName", u.UserName);
+                HttpContext.Session.SetInt32("Id", u.Id);
                 return RedirectToRoute(new { controller = "Home", action = "Index" });
             }
         }

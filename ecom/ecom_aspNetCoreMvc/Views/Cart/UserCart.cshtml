@@ -1,0 +1,49 @@
+﻿
+@{
+    ViewData["Title"] = "UserCart";
+}
+
+@model Cart
+
+<section>
+    <div class="container">
+        <div class="card">
+            <div class="card-header text-center">
+                <h6>Votre panier</h6>
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+
+                            <th scope="col">Title</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Quantity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (CartArticle c in Model.Articles)
+                        {
+                            <tr>
+
+                                <th>@c.Article.Title</th>
+                                <th>@c.Article.Price €</th>
+                                <th scope="col">@c.Quantity</th>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <div class="row">
+                    <div class="col">
+                        Total : @Model.Total €
+                    </div>
+                    <div class="col">
+                        <a class="btn btn-danger" asp-controller="Cart" , asp-action="SaveCart">Payer</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
