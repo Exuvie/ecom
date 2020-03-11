@@ -27,6 +27,8 @@ namespace ecom_aspNetCoreMvc.Controllers
             {
                 v.Logged = logged;
                 v.UserName = HttpContext.Session.GetString("UserName");
+                v.Total = HttpContext.Session.GetString("Total");
+                v.NbArticles = HttpContext.Session.GetString("NbArticles");
             }
         }
 

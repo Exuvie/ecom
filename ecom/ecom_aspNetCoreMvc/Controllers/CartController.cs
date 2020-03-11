@@ -19,9 +19,11 @@ namespace ecom_aspNetCoreMvc.Controllers
                 v.Logged = logged;
                 v.UserName = HttpContext.Session.GetString("UserName");
                 v.Id = HttpContext.Session.GetInt32("Id");
+                v.Total = HttpContext.Session.GetString("Total");
+                v.NbArticles = HttpContext.Session.GetString("NbArticles");
             }
         }
-
+        
         public IActionResult UserCart()
         {
             UserConnect(ViewBag);
@@ -33,27 +35,41 @@ namespace ecom_aspNetCoreMvc.Controllers
 
         public IActionResult AddArticleToCart(int id)
         {
-            UserConnect(ViewBag);
             string jsonCart = HttpContext.Session.GetString("cart");
             Cart cart = (jsonCart == null) ? new Cart() : JsonConvert.DeserializeObject<Cart>(jsonCart);
             cart.AddArticleToCart(Article.GetArticleById(id));
             HttpContext.Session.SetString("cart", JsonConvert.SerializeObject(cart));
-            return RedirectToAction("UserCart");
+            string total = Convert.ToString(cart.Total);
+            HttpContext.Session.SetString("Total", total);
+            string nbArticles = Convert.ToString(cart.NbArticles);
+            HttpContext.Session.SetString("NbArticles", nbArticles);
+            return RedirectToRoute(new { controller = "Home", action = "ListArticle" });
         }
 
         public IActionResult SaveCart()
         {
-            HttpContext.Session.SetString("logged", "true");
+            UserConnect(ViewBag);
             User u = new User();
             u.Id = Convert.ToInt32(HttpContext.Session.GetInt32("Id"));
             string jsonCart = HttpContext.Session.GetString("cart");
             Cart cart = JsonConvert.DeserializeObject<Cart>(jsonCart);
-            cart.UserId = u.Id;
+            cart.User.Id = u.Id;
             cart.SaveCartUser(cart);
-            //return View("UserCart");
-            return RedirectToRoute(new { controller = "Home", action = "Index" });
+            ViewBag.validation = "La commande a été enregistrée";
+            return View("UserCart", cart);
+            //return RedirectToRoute(new { controller = "Home", action = "Index" });
         }
 
+        public IActionResult CartList()
+        {
+            UserConnect(ViewBag);
+            return View(Cart.GetAllCarts());
+        }
 
+        public IActionResult CartDetail(int id)
+        {
+            UserConnect(ViewBag);
+            return View(Cart.GetCartArticleById(id));
+        }
     }
 }

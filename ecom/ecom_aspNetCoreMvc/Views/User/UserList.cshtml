@@ -16,6 +16,9 @@
                 <li class="nav-item">
                     <a asp-controller="User" asp-action="UserList" class="nav-link">Gestion des utilisateurs</a>
                 </li>
+                <li class="nav-item">
+                    <a asp-controller="Cart" asp-action="CartList" class="nav-link">Gestion des paniers</a>
+                </li>
             </ul>
         </div>
     </div>
@@ -35,15 +38,6 @@
                             <button class="btn btn-primary btn-block" type="submit">Rechercher</button>
                         </div>
                     </div>
-
-                    @*<div class="input-group col-8 mb-3">
-                        <div class="input-group-append">
-                            <input name="LastName" type="search" placeholder="Nom" class="form-control text-center" />
-                        </div>
-                        <div class="input-group-append col-4">
-                            <button class="btn btn-outline-secondary" type="submit">Rechercher</button>
-                        </div>
-                    </div>*@
                 </form>
             </div>
             <div class="card-body">

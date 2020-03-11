@@ -1,0 +1,86 @@
+﻿
+@{
+    ViewData["Title"] = "CartDetail";
+}
+
+@model Cart
+
+<section id="admin" class="m-4">
+    <div class="container">
+        <div class="text-center">
+            <h4>Section Administrateur</h4>
+        </div>
+        <div class="">
+            <ul class="nav justify-content-center">
+                <li class="nav-item">
+                    <a asp-controller="Category" asp-action="CategoryAdmin" class="nav-link">Gestion des catégories</a>
+                </li>
+                <li class="nav-item">
+                    <a asp-controller="Article" asp-action="ArticleAdmin" class="nav-link">Gestion des articles</a>
+                </li>
+                <li class="nav-item">
+                    <a asp-controller="User" asp-action="UserList" class="nav-link">Gestion des utilisateurs</a>
+                </li>
+                <li class="nav-item">
+                    <a asp-controller="Cart" asp-action="CartList" class="nav-link">Gestion des paniers</a>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+</section>
+
+@if (Model != null)
+{
+    <section>
+        <div class="container">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h6>Détail du panier du client: @Model.User.FirstName @Model.User.LastName</h6>
+                    <h6> commande N° @Model.Id</h6>
+                </div>
+                <div class="card-body text-center">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Articles</th>
+                                <th scope="col">Quantité</th>
+                                <th scope="col">Prix unitaire €</th>
+                                <th scope="col">Total €</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (CartArticle ca in Model.Articles)
+                            {
+                                <tr>
+                                    <th scope="col">
+                                        @ca.Article.Title
+                                    </th>
+                                    <th scope="col">
+                                        @ca.Quantity
+                                    </th>
+                                    <th scope="col">
+                                        @ca.Article.Price
+                                    </th>
+                                    <th scope="col">
+                                        @(Convert.ToDecimal(ca.Article.Price) * ca.Quantity)
+                                    </th>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <div class="card-body">
+                        <div class="col">
+                            Total : @(Convert.ToDecimal(Model.Total)) €
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+}
+else
+{
+    <h4>Aucune commande avec cet identifiant</h4>
+}
+
