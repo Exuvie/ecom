@@ -47,13 +47,13 @@
                         </li>
                         @if (ViewBag.logged == true && ViewBag.UserName != "Admin")
                         {
-                                <li>
-                                    <a asp-controller="Cart" asp-action="UserCart" class="btn btn-primary">
-                                        Panier <span>@ViewBag.Total€ </span> <span> @ViewBag.NbArticles</span>
-                                    </a>
-                                </li>
+                            <li>
+                                <a asp-controller="Cart" asp-action="UserCart" class="btn btn-outline-dark">
+                                    Panier <span class="badge badge-light">@ViewBag.Total€ </span> <span class="badge badge-light"> @ViewBag.NbArticles</span>
+                                </a>
+                            </li>
                         }
-                        </ul>
+                    </ul>
                 </div>
                 <div id="connect">
                     @if (ViewBag.Logged == true)

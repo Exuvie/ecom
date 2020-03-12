@@ -23,7 +23,7 @@ namespace ecom_aspNetCoreMvc.Controllers
                 v.NbArticles = HttpContext.Session.GetString("NbArticles");
             }
         }
-        
+
         public IActionResult UserCart()
         {
             UserConnect(ViewBag);
@@ -51,12 +51,45 @@ namespace ecom_aspNetCoreMvc.Controllers
             UserConnect(ViewBag);
             User u = new User();
             u.Id = Convert.ToInt32(HttpContext.Session.GetInt32("Id"));
-            string jsonCart = HttpContext.Session.GetString("cart");
-            Cart cart = JsonConvert.DeserializeObject<Cart>(jsonCart);
-            cart.User.Id = u.Id;
-            cart.SaveCartUser(cart);
-            ViewBag.validation = "La commande a été enregistrée";
+            Cart cart = new Cart();
+            string nbA = HttpContext.Session.GetString("NbArticles");
+            
+            //string total = Convert.ToString(cart.Total);
+            //HttpContext.Session.SetString("Total", total);
+            if (nbA == null)
+            {
+                ViewBag.validation = "Aucun article sélectionné";
+                //return View("UserCart");
+            }
+            else
+            {
+                string jsonCart = HttpContext.Session.GetString("cart");
+                cart = JsonConvert.DeserializeObject<Cart>(jsonCart);
+                cart.User.Id = u.Id;
+                cart.SaveCartUser(cart);
+                ViewBag.validation = "La commande a été enregistrée";
+                
+                //ViewBag.Articles = "0";
+                //ViewBag.Total = "0";
+                //cart.NbArticles = 0;
+                //cart.Total = 0;
+                //cart.Articles = new List<CartArticle>();
+                jsonCart = null;
+                cart = (jsonCart == null) ? new Cart() : JsonConvert.DeserializeObject<Cart>(jsonCart);
+                //cart = (jsonCart == null) ? new Cart() : JsonConvert.DeserializeObject<Cart>(jsonCart);
+                //string total = Convert.ToString(cart.Total);
+                HttpContext.Session.SetString("Total", "0");
+                //string nbArticles = Convert.ToString(cart.NbArticles);
+                HttpContext.Session.SetString("NbArticles", "0");
+                
+                //return View("UserCart", cart);
+            }
             return View("UserCart", cart);
+            //return RedirectToAction("UserCart", cart);
+            //cart = JsonConvert.DeserializeObject<Cart>(jsonCart);
+            //cart = null;
+            //HttpContext.Session.Clear();
+
             //return RedirectToRoute(new { controller = "Home", action = "Index" });
         }
 

@@ -51,6 +51,7 @@ namespace ecom_aspNetCoreMvc.Controllers
         [HttpPost]
         public IActionResult RegisterArticle(string title, string description, decimal? price, int? idCategory, IFormFile imageArticle)
         {
+            UserConnect(ViewBag);
             List<string> message = new List<string>();
             Article a = new Article { Title = title, Description = description, Price = price, IdCategory = idCategory };
             if (idCategory == null)
