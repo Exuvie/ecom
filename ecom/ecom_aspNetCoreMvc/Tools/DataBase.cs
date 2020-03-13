@@ -10,7 +10,7 @@ namespace ecom_aspNetCoreMvc.Tools
     {
         private static DataBase instance = null;
         private static object _lock = new object();
-        private string connectionString = "Rentre ici la chaine";
+        private string connectionString = "";
         public MySqlConnection connection;
 
         public static DataBase Instance
@@ -31,6 +31,5 @@ namespace ecom_aspNetCoreMvc.Tools
             connection = new MySqlConnection(connectionString);
         }
     }
-
 
 }

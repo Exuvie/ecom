@@ -52,7 +52,6 @@ namespace ecom_aspNetCoreMvc.Models
                 Articles.Add(new CartArticle { Article = article, Quantity = 1 });
                 NbArticles += 1;
             }
-            //System.Diagnostics.Debug.WriteLine(Articles);
             UpdateTotal();
         }
 
@@ -74,9 +73,10 @@ namespace ecom_aspNetCoreMvc.Models
             DataBase.Instance.connection.Open();
             command.ExecuteNonQuery();
             command.Dispose();
+            // Ici commence le bricolage afin de récupérer l'id du cart inserré
             request = "SELECT * FROM Cart";
             command = new MySqlCommand(request, DataBase.Instance.connection);
-            MySqlDataReader reader = command.ExecuteReader();
+            reader = command.ExecuteReader();
             int tmpId=0;
             int cId=0;
             while (reader.Read())
@@ -88,6 +88,7 @@ namespace ecom_aspNetCoreMvc.Models
                 }
             }
             c.Id = cId;
+            reader.Close();
             command.Dispose();
             foreach (CartArticle ca in Articles)
             {
@@ -112,7 +113,7 @@ namespace ecom_aspNetCoreMvc.Models
             command = new MySqlCommand(request, DataBase.Instance.connection);
             command.Parameters.Add(new MySqlParameter("@cartId", Id));
             DataBase.Instance.connection.Open();
-            MySqlDataReader reader = command.ExecuteReader();
+            reader = command.ExecuteReader();
             while (reader.Read())
             {
                 Articles.Add(new CartArticle
@@ -137,7 +138,7 @@ namespace ecom_aspNetCoreMvc.Models
             request = "SELECT c.id as cartId, c.total, u.id as userId, u.lastName, u.firstName FROM Cart as c INNER JOIN Users as u ON c.userId = u.id";
             command = new MySqlCommand(request, DataBase.Instance.connection);
             DataBase.Instance.connection.Open();
-            MySqlDataReader reader = command.ExecuteReader();
+            reader = command.ExecuteReader();
             while (reader.Read())
             {
                 Cart c = new Cart
@@ -174,7 +175,7 @@ namespace ecom_aspNetCoreMvc.Models
             command = new MySqlCommand(request, DataBase.Instance.connection);
             command.Parameters.Add(new MySqlParameter("@id", id));
             DataBase.Instance.connection.Open();
-            MySqlDataReader reader = command.ExecuteReader();
+            reader = command.ExecuteReader();
             if (reader.Read())
             {
                 cart = new Cart
