@@ -21,6 +21,7 @@ namespace ecom_aspNetCoreMvc.Models
         private static MySqlCommand command;
         private static MySqlDataReader reader;
 
+
         public int Id { get => id; set => id = value; }
         //public int UserId { get => userId; set => userId = value; }
         public List<CartArticle> Articles { get => articles; set => articles = value; }

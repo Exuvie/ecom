@@ -140,8 +140,6 @@ namespace ecom_aspNetCoreMvc.Models
             return articles;
         }
 
-
-
         public static void DeleteArticle(Article a)
         {
             request = "DELETE FROM Article WHERE id = @id";
