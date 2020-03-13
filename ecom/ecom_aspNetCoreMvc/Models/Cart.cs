@@ -1,4 +1,5 @@
 ﻿using ecom_aspNetCoreMvc.Tools;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -17,8 +18,8 @@ namespace ecom_aspNetCoreMvc.Models
         private decimal total;
 
         private static string request;
-        private static SqlCommand command;
-        private static SqlDataReader reader;
+        private static MySqlCommand command;
+        private static MySqlDataReader reader;
 
         public int Id { get => id; set => id = value; }
         //public int UserId { get => userId; set => userId = value; }
@@ -66,23 +67,39 @@ namespace ecom_aspNetCoreMvc.Models
 
         public void SaveCartUser(Cart c)
         {
-            request = "INSERT INTO Cart (userId, total) OUTPUT INSERTED.ID VALUES (@userId, @total)";
-            command = new SqlCommand(request, DataBase.Instance.connection);
-            command.Parameters.Add(new SqlParameter("@total", c.Total));
-            command.Parameters.Add(new SqlParameter("@userId", c.User.Id));
+            request = "INSERT INTO Cart (userId, total) VALUES (@userId, @total)";
+            command = new MySqlCommand(request, DataBase.Instance.connection);            
+            command.Parameters.Add(new MySqlParameter("@total", c.Total));
+            command.Parameters.Add(new MySqlParameter("@userId", c.User.Id));
             DataBase.Instance.connection.Open();
-            c.Id = (int)command.ExecuteScalar();
+            command.ExecuteNonQuery();
+            command.Dispose();
+            request = "SELECT * FROM Cart";
+            command = new MySqlCommand(request, DataBase.Instance.connection);
+            MySqlDataReader reader = command.ExecuteReader();
+            int tmpId=0;
+            int cId=0;
+            while (reader.Read())
+            {
+                tmpId = reader.GetInt32(0);
+                if(cId<tmpId)
+                {
+                    cId = tmpId;
+                }
+            }
+            c.Id = cId;
             command.Dispose();
             foreach (CartArticle ca in Articles)
             {
                 request = "INSERT INTO CartArticle (cartId, articleId, quantity) VALUES (@cartId, @articleId, @quantity)";
-                command = new SqlCommand(request, DataBase.Instance.connection);
-                command.Parameters.Add(new SqlParameter("@cartId", Id));
-                command.Parameters.Add(new SqlParameter("@articleId", ca.Article.Id));
-                command.Parameters.Add(new SqlParameter("@quantity", ca.Quantity));
+                command = new MySqlCommand(request, DataBase.Instance.connection);
+                command.Parameters.Add(new MySqlParameter("@cartId", Id));
+                command.Parameters.Add(new MySqlParameter("@articleId", ca.Article.Id));
+                command.Parameters.Add(new MySqlParameter("@quantity", ca.Quantity));
                 command.ExecuteNonQuery();
                 command.Dispose();
             }
+            command.Dispose();
             DataBase.Instance.connection.Close();
         }
 
@@ -92,10 +109,10 @@ namespace ecom_aspNetCoreMvc.Models
                         "INNER JOIN Article as a " +
                         "ON a.id = ca.articleId " +
                         "WHERE ca.cartId = @cartId";
-            command = new SqlCommand(request, DataBase.Instance.connection);
-            command.Parameters.Add(new SqlParameter("@cartId", Id));
+            command = new MySqlCommand(request, DataBase.Instance.connection);
+            command.Parameters.Add(new MySqlParameter("@cartId", Id));
             DataBase.Instance.connection.Open();
-            SqlDataReader reader = command.ExecuteReader();
+            MySqlDataReader reader = command.ExecuteReader();
             while (reader.Read())
             {
                 Articles.Add(new CartArticle
@@ -118,9 +135,9 @@ namespace ecom_aspNetCoreMvc.Models
         {
             List<Cart> liste = new List<Cart>();
             request = "SELECT c.id as cartId, c.total, u.id as userId, u.lastName, u.firstName FROM Cart as c INNER JOIN Users as u ON c.userId = u.id";
-            command = new SqlCommand(request, DataBase.Instance.connection);
+            command = new MySqlCommand(request, DataBase.Instance.connection);
             DataBase.Instance.connection.Open();
-            SqlDataReader reader = command.ExecuteReader();
+            MySqlDataReader reader = command.ExecuteReader();
             while (reader.Read())
             {
                 Cart c = new Cart
@@ -154,10 +171,10 @@ namespace ecom_aspNetCoreMvc.Models
                         "INNER JOIN Users as u " +
                         "ON c.userId = u.id " +
                         "WHERE c.id = @id";
-            command = new SqlCommand(request, DataBase.Instance.connection);
-            command.Parameters.Add(new SqlParameter("@id", id));
+            command = new MySqlCommand(request, DataBase.Instance.connection);
+            command.Parameters.Add(new MySqlParameter("@id", id));
             DataBase.Instance.connection.Open();
-            SqlDataReader reader = command.ExecuteReader();
+            MySqlDataReader reader = command.ExecuteReader();
             if (reader.Read())
             {
                 cart = new Cart

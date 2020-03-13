@@ -1,4 +1,5 @@
 ﻿using ecom_aspNetCoreMvc.Tools;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -26,8 +27,8 @@ namespace ecom_aspNetCoreMvc.Models
         private List<Article> articles;
 
         private static string request;
-        private static SqlCommand command;
-        private static SqlDataReader reader;
+        private static MySqlCommand command;
+        private static MySqlDataReader reader;
 
         public int Id { get => id; set => id = value; }
         public string LastName { get => lastName; set => lastName = value; }
@@ -66,8 +67,8 @@ namespace ecom_aspNetCoreMvc.Models
             if (u.Email != null)
             {
                 request = "SELECT * FROM Users WHERE email = @email";
-                command = new SqlCommand(request, DataBase.Instance.connection);
-                command.Parameters.Add(new SqlParameter("@email", u.Email));
+                command = new MySqlCommand(request, DataBase.Instance.connection);
+                command.Parameters.Add(new MySqlParameter("@email", u.Email));
                 DataBase.Instance.connection.Open();
                 reader = command.ExecuteReader();
                 if (reader.Read())
@@ -98,9 +99,9 @@ namespace ecom_aspNetCoreMvc.Models
                 MD5 md5Hash = MD5.Create();
                 string passwordHash = GetMd5Hash(md5Hash, password);
                 request = "SELECT Id, userName FROM Users WHERE email=@email and password=@password";
-                command = new SqlCommand(request, DataBase.Instance.connection);
-                command.Parameters.Add(new SqlParameter("@email", email));
-                command.Parameters.Add(new SqlParameter("password", passwordHash));
+                command = new MySqlCommand(request, DataBase.Instance.connection);
+                command.Parameters.Add(new MySqlParameter("@email", email));
+                command.Parameters.Add(new MySqlParameter("password", passwordHash));
                 DataBase.Instance.connection.Open();
                 reader = command.ExecuteReader();
                 if (reader.Read())
@@ -127,21 +128,21 @@ namespace ecom_aspNetCoreMvc.Models
         public void AddUser(User u)
         {
             request = "INSERT INTO Users (lastName, firstName, userName, phone, email, address, zip, city, password)" +
-                " OUTPUT INSERTED.ID VALUES (@lastName, @firstName, @userName, @phone, @email, @address, @zip, @city, @password)";
-            command = new SqlCommand(request, DataBase.Instance.connection);
+                "VALUES (@lastName, @firstName, @userName, @phone, @email, @address, @zip, @city, @password); SELECT LAST_INSERT_ID()";
+            command = new MySqlCommand(request, DataBase.Instance.connection);
             MD5 md5Hash = MD5.Create();
             string passwordHash = GetMd5Hash(md5Hash, u.Password);
-            command.Parameters.Add(new SqlParameter("@LastName", u.LastName));
-            command.Parameters.Add(new SqlParameter("@firstName", u.FirstName));
-            command.Parameters.Add(new SqlParameter("@userName", u.UserName));
-            command.Parameters.Add(new SqlParameter("@phone", u.Phone));
-            command.Parameters.Add(new SqlParameter("@email", u.Email));
-            command.Parameters.Add(new SqlParameter("@address", u.Address));
-            command.Parameters.Add(new SqlParameter("@zip", u.Zip));
-            command.Parameters.Add(new SqlParameter("@city", u.City));
-            command.Parameters.Add(new SqlParameter("@password", passwordHash));
+            command.Parameters.Add(new MySqlParameter("@LastName", u.LastName));
+            command.Parameters.Add(new MySqlParameter("@firstName", u.FirstName));
+            command.Parameters.Add(new MySqlParameter("@userName", u.UserName));
+            command.Parameters.Add(new MySqlParameter("@phone", u.Phone));
+            command.Parameters.Add(new MySqlParameter("@email", u.Email));
+            command.Parameters.Add(new MySqlParameter("@address", u.Address));
+            command.Parameters.Add(new MySqlParameter("@zip", u.Zip));
+            command.Parameters.Add(new MySqlParameter("@city", u.City));
+            command.Parameters.Add(new MySqlParameter("@password", passwordHash));
             DataBase.Instance.connection.Open();
-            u.Id = (int)command.ExecuteScalar();
+            command.ExecuteNonQuery();
             command.Dispose();
             DataBase.Instance.connection.Close();
         }
@@ -149,7 +150,7 @@ namespace ecom_aspNetCoreMvc.Models
         public static List<User> GetUserList()
         {
             List<User> users = new List<User>();
-            command = new SqlCommand("SELECT * FROM Users", DataBase.Instance.connection);
+            command = new MySqlCommand("SELECT * FROM Users", DataBase.Instance.connection);
             DataBase.Instance.connection.Open();
             reader = command.ExecuteReader();
             while (reader.Read())
@@ -178,8 +179,8 @@ namespace ecom_aspNetCoreMvc.Models
         {
             //User u = null;
             List<User> users = new List<User>();
-            command = new SqlCommand("SELECT * FROM Users WHERE lastName LIKE @lastName", DataBase.Instance.connection);
-            command.Parameters.Add(new SqlParameter("@lastName", "%" + lastName + "%"));
+            command = new MySqlCommand("SELECT * FROM Users WHERE lastName LIKE @lastName", DataBase.Instance.connection);
+            command.Parameters.Add(new MySqlParameter("@lastName", "%" + lastName + "%"));
             DataBase.Instance.connection.Open();
             reader = command.ExecuteReader();
             while (reader.Read())
@@ -207,8 +208,8 @@ namespace ecom_aspNetCoreMvc.Models
         public static void DeleteUser(User u)
         {
             request = "DELETE FROM Users WHERE id = @id";
-            command = new SqlCommand(request, DataBase.Instance.connection);
-            command.Parameters.Add(new SqlParameter("@id", u.id));
+            command = new MySqlCommand(request, DataBase.Instance.connection);
+            command.Parameters.Add(new MySqlParameter("@id", u.id));
             DataBase.Instance.connection.Open();
             command.ExecuteNonQuery();
             DataBase.Instance.connection.Close();

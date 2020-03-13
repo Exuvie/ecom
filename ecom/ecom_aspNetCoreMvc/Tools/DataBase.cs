@@ -1,6 +1,6 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -10,8 +10,8 @@ namespace ecom_aspNetCoreMvc.Tools
     {
         private static DataBase instance = null;
         private static object _lock = new object();
-        private string connectionString = @"Data Source=(LocalDb)\ecom;Integrated Security=True";
-        public SqlConnection connection;
+        private string connectionString = "Rentre ici la chaine";
+        public MySqlConnection connection;
 
         public static DataBase Instance
         {
@@ -28,7 +28,7 @@ namespace ecom_aspNetCoreMvc.Tools
 
         private DataBase()
         {
-            connection = new SqlConnection(connectionString);
+            connection = new MySqlConnection(connectionString);
         }
     }
 

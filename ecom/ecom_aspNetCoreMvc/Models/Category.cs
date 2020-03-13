@@ -1,4 +1,5 @@
 ﻿using ecom_aspNetCoreMvc.Tools;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -13,19 +14,19 @@ namespace ecom_aspNetCoreMvc.Models
         private string title;
 
         private static string request;
-        private static SqlCommand command;
-        private static SqlDataReader reader;
+        private static MySqlCommand command;
+        private static MySqlDataReader reader;
 
         public int Id { get => id; set => id = value; }
         public string Title { get => title; set => title = value; }
 
         public static void AddCategory(Category c)
         {
-            request = "INSERT INTO Category (title) OUTPUT INSERTED.ID VALUES (@title)";
-            command = new SqlCommand(request, DataBase.Instance.connection);
-            command.Parameters.Add(new SqlParameter("@title", c.Title));
+            request = "INSERT INTO Category (title) VALUES (@title)";
+            command = new MySqlCommand(request, DataBase.Instance.connection);
+            command.Parameters.Add(new MySqlParameter("@title", c.Title));
             DataBase.Instance.connection.Open();
-            c.Id = (int)command.ExecuteScalar();
+            command.ExecuteNonQuery();
             command.Dispose();
             DataBase.Instance.connection.Close();
         }
@@ -34,14 +35,13 @@ namespace ecom_aspNetCoreMvc.Models
         {
             bool result = false;
             request = "DELETE FROM Category WHERE id = @id";
-            command = new SqlCommand(request, DataBase.Instance.connection);
-            command.Parameters.Add(new SqlParameter("@id", c.Id));
+            command = new MySqlCommand(request, DataBase.Instance.connection);
+            command.Parameters.Add(new MySqlParameter("@id", c.Id));
             DataBase.Instance.connection.Open();
             if (command.ExecuteNonQuery() > 0)
             {
                 result = true;
             }
-            //command.ExecuteNonQuery();
             DataBase.Instance.connection.Close();
             return result;
         }
@@ -50,7 +50,7 @@ namespace ecom_aspNetCoreMvc.Models
         {
             List<Category> categories = new List<Category>();
             request = "SELECT * FROM Category";
-            command = new SqlCommand(request, DataBase.Instance.connection);
+            command = new MySqlCommand(request, DataBase.Instance.connection);
             DataBase.Instance.connection.Open();
             reader = command.ExecuteReader();
             while(reader.Read())
@@ -74,8 +74,8 @@ namespace ecom_aspNetCoreMvc.Models
             if (c.Title != null)
             {
                 request = "SELECT * FROM Category WHERE title = @title";
-                command = new SqlCommand(request, DataBase.Instance.connection);
-                command.Parameters.Add(new SqlParameter("@title", c.Title));
+                command = new MySqlCommand(request, DataBase.Instance.connection);
+                command.Parameters.Add(new MySqlParameter("@title", c.Title));
                 DataBase.Instance.connection.Open();
                 reader = command.ExecuteReader();
                 if (reader.Read())

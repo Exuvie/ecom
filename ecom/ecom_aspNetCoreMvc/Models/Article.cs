@@ -1,4 +1,5 @@
 ﻿using ecom_aspNetCoreMvc.Tools;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -18,8 +19,8 @@ namespace ecom_aspNetCoreMvc.Models
         private int? idCategory;
 
         private static string request;
-        private static SqlCommand command;
-        private static SqlDataReader reader;
+        private static MySqlCommand command;
+        private static MySqlDataReader reader;
 
         public int Id { get => id; set => id = value; }
         public string Title { get => title; set => title = value; }
@@ -35,16 +36,16 @@ namespace ecom_aspNetCoreMvc.Models
 
         public void AddArticle(Article a)
         {
-            request = "INSERT INTO Article (title, description, price, addDate, urlImage, idCategory) OUTPUT INSERTED.ID VALUES (@title, @description, @price, @addDate, @urlImage, @idCategory)";
-            command = new SqlCommand(request, DataBase.Instance.connection);
-            command.Parameters.Add(new SqlParameter("@title", a.Title));
-            command.Parameters.Add(new SqlParameter("@description", a.Description));
-            command.Parameters.Add(new SqlParameter("@price", a.Price));
-            command.Parameters.Add(new SqlParameter("@addDate", DateTime.Now));
-            command.Parameters.Add(new SqlParameter("@urlImage", a.UrlImage));
-            command.Parameters.Add(new SqlParameter("@idCategory", a.idCategory));
+            request = "INSERT INTO Article (title, description, price, addDate, urlImage, idCategory) VALUES (@title, @description, @price, @addDate, @urlImage, @idCategory)";
+            command = new MySqlCommand(request, DataBase.Instance.connection);
+            command.Parameters.Add(new MySqlParameter("@title", a.Title));
+            command.Parameters.Add(new MySqlParameter("@description", a.Description));
+            command.Parameters.Add(new MySqlParameter("@price", a.Price));
+            command.Parameters.Add(new MySqlParameter("@addDate", DateTime.Now));
+            command.Parameters.Add(new MySqlParameter("@urlImage", a.UrlImage));
+            command.Parameters.Add(new MySqlParameter("@idCategory", a.idCategory));
             DataBase.Instance.connection.Open();
-            a.Id = (int)command.ExecuteScalar();
+            command.ExecuteNonQuery();
             command.Dispose();
             DataBase.Instance.connection.Close();
         }
@@ -55,13 +56,13 @@ namespace ecom_aspNetCoreMvc.Models
             if (idCategory == null)
             {
                 request = "SELECT * FROM Article";
-                command = new SqlCommand(request, DataBase.Instance.connection);
+                command = new MySqlCommand(request, DataBase.Instance.connection);
             }
             else
             {
                 request = "SELECT * FROM Article WHERE idCategory = @idCategory";
-                command = new SqlCommand(request, DataBase.Instance.connection);
-                command.Parameters.Add(new SqlParameter("@idCategory", idCategory));
+                command = new MySqlCommand(request, DataBase.Instance.connection);
+                command.Parameters.Add(new MySqlParameter("@idCategory", idCategory));
             }
             DataBase.Instance.connection.Open();
             reader = command.ExecuteReader();
@@ -89,8 +90,8 @@ namespace ecom_aspNetCoreMvc.Models
         {
             Article a = null;
             request = "SELECT id, title, description, price, addDate, urlImage, idCategory FROM Article WHERE id = @id";
-            command = new SqlCommand(request, DataBase.Instance.connection);
-            command.Parameters.Add(new SqlParameter("@id", id));
+            command = new MySqlCommand(request, DataBase.Instance.connection);
+            command.Parameters.Add(new MySqlParameter("@id", id));
             DataBase.Instance.connection.Open();
             reader = command.ExecuteReader();
             if (reader.Read())
@@ -116,7 +117,7 @@ namespace ecom_aspNetCoreMvc.Models
         {
             List<Article> articles = new List<Article>();
             request = "SELECT id, title, description, price, addDate, urlImage, idCategory FROM Article";
-            command = new SqlCommand(request, DataBase.Instance.connection);
+            command = new MySqlCommand(request, DataBase.Instance.connection);
             DataBase.Instance.connection.Open();
             reader = command.ExecuteReader();
             while (reader.Read())
@@ -144,8 +145,8 @@ namespace ecom_aspNetCoreMvc.Models
         public static void DeleteArticle(Article a)
         {
             request = "DELETE FROM Article WHERE id = @id";
-            command = new SqlCommand(request, DataBase.Instance.connection);
-            command.Parameters.Add(new SqlParameter("@id", a.id));
+            command = new MySqlCommand(request, DataBase.Instance.connection);
+            command.Parameters.Add(new MySqlParameter("@id", a.id));
             DataBase.Instance.connection.Open();
             command.ExecuteNonQuery();
             DataBase.Instance.connection.Close();
