@@ -14,7 +14,7 @@ namespace ecom_aspNetCoreMvc.Models
         private User user;
         private List<CartArticle> articles;
         private int nbArticles;
-        private decimal? total;
+        private decimal total;
 
         private static string request;
         private static SqlCommand command;
@@ -23,7 +23,7 @@ namespace ecom_aspNetCoreMvc.Models
         public int? Id { get => id; set => id = value; }
         //public int UserId { get => userId; set => userId = value; }
         public List<CartArticle> Articles { get => articles; set => articles = value; }
-        public decimal? Total { get => total; set => total = value; }
+        public decimal Total { get => total; set => total = value; }
         public User User { get => user; set => user = value; }
         public int NbArticles { get => nbArticles; set => nbArticles = value; }
 
@@ -53,6 +53,28 @@ namespace ecom_aspNetCoreMvc.Models
                 NbArticles += 1;
             }
             //System.Diagnostics.Debug.WriteLine(Articles);
+            UpdateTotal();
+        }
+
+        public void RemoveArticleToCart(Article article)
+        {
+            foreach (CartArticle c in Articles)
+            {
+                if (c.Article.Id == article.Id)
+                {
+                    if (c.Quantity == 0)
+                    {
+                        NbArticles = 0;
+                    }
+                    else
+                    {
+                        c.Quantity--;
+                        NbArticles -= 1;
+                        break;
+                    }
+                    
+                }
+            }
             UpdateTotal();
         }
 

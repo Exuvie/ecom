@@ -45,7 +45,7 @@
                         <li class="nav-item">
                             <a asp-controller="User" asp-action="Login" class="nav-link">S'inscrire</a>
                         </li>
-                        @if (ViewBag.logged == true && ViewBag.UserName != "Admin")
+                        @if (ViewBag.logged == true)
                         {
                             <li>
                                 <a asp-controller="Cart" asp-action="UserCart" class="btn btn-outline-dark">

@@ -43,7 +43,31 @@ namespace ecom_aspNetCoreMvc.Controllers
             HttpContext.Session.SetString("Total", total);
             string nbArticles = Convert.ToString(cart.NbArticles);
             HttpContext.Session.SetString("NbArticles", nbArticles);
-            return RedirectToRoute(new { controller = "Home", action = "ListArticle" });
+            return RedirectToRoute(new { controller = "Cart", action = "UserCart" });
+        }
+
+        public IActionResult RemoveArticleToCart(int id)
+        {
+            string jsonCart = HttpContext.Session.GetString("cart");
+            Cart cart = JsonConvert.DeserializeObject<Cart>(jsonCart);
+            cart.RemoveArticleToCart(Article.GetArticleById(id));
+            HttpContext.Session.SetString("cart", JsonConvert.SerializeObject(cart));
+            //foreach (CartArticle ca in cart.Articles)
+            //{
+            //    if (ca.Quantity == 0)
+            //    {
+            //        //cart = new Cart();
+            //        cart.Articles.Remove(ca);
+            //        //HttpContext.Session.GetString("cart");
+
+
+            //    }
+            //}
+            string total = Convert.ToString(cart.Total);
+            HttpContext.Session.SetString("Total", total);
+            string nbArticles = Convert.ToString(cart.NbArticles);
+            HttpContext.Session.SetString("NbArticles", nbArticles);
+            return RedirectToRoute(new { controller = "Cart", action = "UserCart" });
         }
 
         public IActionResult SaveCart()
@@ -54,12 +78,9 @@ namespace ecom_aspNetCoreMvc.Controllers
             Cart cart = new Cart();
             string nbA = HttpContext.Session.GetString("NbArticles");
             
-            //string total = Convert.ToString(cart.Total);
-            //HttpContext.Session.SetString("Total", total);
-            if (nbA == null)
+            if (nbA == null || nbA == "0")
             {
                 ViewBag.validation = "Aucun article sélectionné";
-                //return View("UserCart");
             }
             else
             {
@@ -68,29 +89,16 @@ namespace ecom_aspNetCoreMvc.Controllers
                 cart.User.Id = u.Id;
                 cart.SaveCartUser(cart);
                 ViewBag.validation = "La commande a été enregistrée";
-                
-                //ViewBag.Articles = "0";
-                //ViewBag.Total = "0";
-                //cart.NbArticles = 0;
-                //cart.Total = 0;
-                //cart.Articles = new List<CartArticle>();
-                jsonCart = null;
-                cart = (jsonCart == null) ? new Cart() : JsonConvert.DeserializeObject<Cart>(jsonCart);
-                //cart = (jsonCart == null) ? new Cart() : JsonConvert.DeserializeObject<Cart>(jsonCart);
-                //string total = Convert.ToString(cart.Total);
-                HttpContext.Session.SetString("Total", "0");
-                //string nbArticles = Convert.ToString(cart.NbArticles);
-                HttpContext.Session.SetString("NbArticles", "0");
-                
-                //return View("UserCart", cart);
+
+                cart = new Cart();
+                HttpContext.Session.SetString("cart", JsonConvert.SerializeObject(cart));
+                //jsonCart = HttpContext.Session.GetString("cart");
+                string total = Convert.ToString(cart.Total);
+                HttpContext.Session.SetString("Total", total);
+                string nbArticles = Convert.ToString(cart.NbArticles);
+                HttpContext.Session.SetString("NbArticles", nbArticles);
             }
             return View("UserCart", cart);
-            //return RedirectToAction("UserCart", cart);
-            //cart = JsonConvert.DeserializeObject<Cart>(jsonCart);
-            //cart = null;
-            //HttpContext.Session.Clear();
-
-            //return RedirectToRoute(new { controller = "Home", action = "Index" });
         }
 
         public IActionResult CartList()
