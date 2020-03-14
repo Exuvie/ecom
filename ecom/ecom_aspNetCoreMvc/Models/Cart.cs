@@ -9,7 +9,7 @@ namespace ecom_aspNetCoreMvc.Models
 {
     public class Cart
     {
-        private int id;
+        private int? id;
         //private int userId;
         private User user;
         private List<CartArticle> articles;
@@ -20,7 +20,7 @@ namespace ecom_aspNetCoreMvc.Models
         private static SqlCommand command;
         private static SqlDataReader reader;
 
-        public int Id { get => id; set => id = value; }
+        public int? Id { get => id; set => id = value; }
         //public int UserId { get => userId; set => userId = value; }
         public List<CartArticle> Articles { get => articles; set => articles = value; }
         public decimal Total { get => total; set => total = value; }
@@ -31,6 +31,7 @@ namespace ecom_aspNetCoreMvc.Models
         {
             Articles = new List<CartArticle>();
             User = new User();
+            Total = 0;
         }
 
         public void AddArticleToCart(Article article)
@@ -52,6 +53,28 @@ namespace ecom_aspNetCoreMvc.Models
                 NbArticles += 1;
             }
             //System.Diagnostics.Debug.WriteLine(Articles);
+            UpdateTotal();
+        }
+
+        public void RemoveArticleToCart(Article article)
+        {
+            foreach (CartArticle c in Articles)
+            {
+                if (c.Article.Id == article.Id)
+                {
+                    if (c.Quantity == 0)
+                    {
+                        NbArticles = 0;
+                    }
+                    else
+                    {
+                        c.Quantity--;
+                        NbArticles -= 1;
+                        break;
+                    }
+                    
+                }
+            }
             UpdateTotal();
         }
 
@@ -179,5 +202,7 @@ namespace ecom_aspNetCoreMvc.Models
             cart?.GetCartArticles();
             return cart;
         }
+
+        
     }
 }
