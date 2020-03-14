@@ -52,17 +52,6 @@ namespace ecom_aspNetCoreMvc.Controllers
             Cart cart = JsonConvert.DeserializeObject<Cart>(jsonCart);
             cart.RemoveArticleToCart(Article.GetArticleById(id));
             HttpContext.Session.SetString("cart", JsonConvert.SerializeObject(cart));
-            //foreach (CartArticle ca in cart.Articles)
-            //{
-            //    if (ca.Quantity == 0)
-            //    {
-            //        //cart = new Cart();
-            //        cart.Articles.Remove(ca);
-            //        //HttpContext.Session.GetString("cart");
-
-
-            //    }
-            //}
             string total = Convert.ToString(cart.Total);
             HttpContext.Session.SetString("Total", total);
             string nbArticles = Convert.ToString(cart.NbArticles);
@@ -92,7 +81,6 @@ namespace ecom_aspNetCoreMvc.Controllers
 
                 cart = new Cart();
                 HttpContext.Session.SetString("cart", JsonConvert.SerializeObject(cart));
-                //jsonCart = HttpContext.Session.GetString("cart");
                 string total = Convert.ToString(cart.Total);
                 HttpContext.Session.SetString("Total", total);
                 string nbArticles = Convert.ToString(cart.NbArticles);

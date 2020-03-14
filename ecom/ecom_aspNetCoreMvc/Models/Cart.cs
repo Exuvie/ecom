@@ -62,9 +62,11 @@ namespace ecom_aspNetCoreMvc.Models
             {
                 if (c.Article.Id == article.Id)
                 {
-                    if (c.Quantity == 0)
+                    if (c.Quantity == 1)
                     {
-                        NbArticles = 0;
+                        Articles.Remove(c);
+                        NbArticles -= 1;
+                        break;
                     }
                     else
                     {
@@ -72,7 +74,6 @@ namespace ecom_aspNetCoreMvc.Models
                         NbArticles -= 1;
                         break;
                     }
-                    
                 }
             }
             UpdateTotal();
