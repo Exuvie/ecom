@@ -206,6 +206,18 @@ namespace ecom_aspNetCoreMvc.Models
 
         public static void DeleteUser(User u)
         {
+
+
+            //request = "DELETE Users, Cart, CartArticle FROM Users" +
+            //    "LEFT JOIN Cart ON (Users.Id = Cart.userId)" +
+            //    "LEFT JOIN CartArticle ON (Cart.Id = CartArticle.cartId)" +
+            //    "WHERE Users.Id = @id";
+
+            //request = "DELETE Cart as c, CartArticle as ca FROM Users as u" +
+            //    "LEFT JOIN c ON (u.Id = c.userId)" +
+            //    "LEFT JOIN ca ON (c.Id = ca.cartId)" +
+            //    "WHERE u.Id = @id";
+
             request = "DELETE FROM Users WHERE id = @id";
             command = new SqlCommand(request, DataBase.Instance.connection);
             command.Parameters.Add(new SqlParameter("@id", u.id));
