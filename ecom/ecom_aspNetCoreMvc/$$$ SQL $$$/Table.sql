@@ -17,18 +17,20 @@ CREATE TABLE [dbo].[Article] (
 ); 
 
 CREATE TABLE [dbo].[Cart] (
-    [Id]     INT          IDENTITY (1, 1) NOT NULL,
-    [userId] INT          NOT NULL,
-    [total]  DECIMAL (10,2) NOT NULL,
+    [Id]           INT             IDENTITY (1, 1) NOT NULL,
+    [userId]       INT             NOT NULL,
+    [total]        DECIMAL (10, 2) NOT NULL,
+    [registerDate] DATETIME        NOT NULL,
     PRIMARY KEY CLUSTERED ([Id] ASC)
-); 
 
-CREATE TABLE [dbo].[CartArticle] (
-    [Id]        INT IDENTITY (1, 1) NOT NULL,
-    [cartId]    INT NOT NULL,
-    [articleId] INT NOT NULL,
-    [quantity]  INT NOT NULL,
-    PRIMARY KEY CLUSTERED ([Id] ASC)
+);
+
+create table [dbo].[cartarticle] (
+    [id]        int identity (1, 1) not null,
+    [cartid]    int not null,
+    [articleid] int not null,
+    [quantity]  int not null,
+    primary key clustered ([id] asc)
 );
 
 CREATE TABLE [dbo].[Category] (
