@@ -20,7 +20,7 @@ namespace ecom_aspNetCoreMvc.Controllers
             }
         }
 
-        [Route("Category/Admin")]
+        //[Route("Category/Admin")]
         public IActionResult CategoryAdmin()
         {
             UserConnect(ViewBag);
@@ -28,7 +28,7 @@ namespace ecom_aspNetCoreMvc.Controllers
             return View("CategoryAdmin", categories);
         }
 
-        [Route("Category/Register")]
+        //[Route("Category/Register")]
         [HttpPost]
         public IActionResult CategoryRegister(string title)
         {         
@@ -59,7 +59,7 @@ namespace ecom_aspNetCoreMvc.Controllers
             string titre = c.Title;
             if (Models.Category.DeleteCategory(c))
             {
-                ViewBag.validation = "La catégorie " + titre + "  a été supprimée";
+                ViewBag.validation = "La catégorie " + titre + "  a été supprimée, ainsi que l'ensemble des articles associés";
             }
             List <Category> categories = Category.GetCategories();
             return View("CategoryAdmin", categories);

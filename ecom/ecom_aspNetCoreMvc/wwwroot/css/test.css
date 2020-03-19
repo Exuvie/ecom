@@ -1,0 +1,15 @@
+﻿body {
+    background-color: black;
+}
+
+/*INDEX*/
+.index {
+    background-color: lightskyblue;
+    font-size: 35px;
+}
+
+    .index h1 {
+        font-weight: bolder;
+        font-size: 36px;
+        color: orange;
+    }

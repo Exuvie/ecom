@@ -32,7 +32,7 @@ namespace ecom_aspNetCoreMvc.Controllers
             }
         }
 
-        [Route("Article/Admin")]
+        //[Route("Article/Admin")]
         [HttpGet]
         public IActionResult ArticleAdmin()
         {
@@ -124,6 +124,7 @@ namespace ecom_aspNetCoreMvc.Controllers
             return View("ArticleAdmin");
         }
 
+        [HttpDelete]
         public IActionResult RemoveArticle(Article a)
         {
             UserConnect(ViewBag);
@@ -137,6 +138,41 @@ namespace ecom_aspNetCoreMvc.Controllers
                 c.UrlImage = $"{Request.Scheme}://{Request.Host.Value}/{c.UrlImage}";
             });
             return View("ArticleAdmin");
+        }
+
+        public IActionResult EditArticle(int id)
+        {
+            UserConnect(ViewBag);
+            ViewBag.Category = Category.GetCategories();
+            return View("EditArticle", Article.GetArticleById(id));
+        }
+
+        //[HttpPut]
+        public IActionResult EditArticlePost(Article a)
+        {
+            Article articleEdit = new Article();
+            //articleEdit.Id = a.Id;
+            if (articleEdit.Title != null && articleEdit.Description != null && articleEdit.Price != null)
+            {
+                a.UpdateArticle(a);
+            }
+            //if (articleEdit.Title != null)
+            //{
+            //    a.Title = articleEdit.Title;
+            //}
+            //if (articleEdit.Description != null)
+            //{
+            //    a.Description = articleEdit.Description;
+            //}
+            //if (articleEdit.Price != null)
+            //{
+            //    a.Price = articleEdit.Price;
+            //}
+            //if (a.UpdateArticle(a))
+            //{
+            //}   
+            //return RedirectToAction("ArticleAdmin");
+            return RedirectToRoute(new { controller = "Article", action = "ArticleAdmin" });
         }
     }
 }

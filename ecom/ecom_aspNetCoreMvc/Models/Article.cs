@@ -139,8 +139,6 @@ namespace ecom_aspNetCoreMvc.Models
             return articles;
         }
 
-
-
         public static void DeleteArticle(Article a)
         {
             request = "DELETE FROM Article WHERE id = @id";
@@ -148,6 +146,21 @@ namespace ecom_aspNetCoreMvc.Models
             command.Parameters.Add(new SqlParameter("@id", a.id));
             DataBase.Instance.connection.Open();
             command.ExecuteNonQuery();
+            DataBase.Instance.connection.Close();
+        }
+
+        public void UpdateArticle(Article a)
+        {
+            request = "UPDATE Article SET title = @title, description = @description, price = @price, addDate = @addDate WHERE id = @id";
+            command = new SqlCommand(request, DataBase.Instance.connection);
+            command.Parameters.Add(new SqlParameter("@title", a.Title));
+            command.Parameters.Add(new SqlParameter("@description", a.Description));
+            command.Parameters.Add(new SqlParameter("@price", a.Price));
+            command.Parameters.Add(new SqlParameter("@addDate", DateTime.Now));
+            command.Parameters.Add(new SqlParameter("@id", a.Id));
+            DataBase.Instance.connection.Open();
+            command.ExecuteNonQuery();
+            command.Dispose();
             DataBase.Instance.connection.Close();
         }
     }

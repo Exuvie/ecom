@@ -142,7 +142,7 @@ namespace ecom_aspNetCoreMvc.Controllers
             return RedirectToRoute(new { controller = "Home", action = "Index" });
         }
 
-        [Route("UserList")]
+        //[Route("UserList")]
         [HttpGet]
         public IActionResult UserList()
         {

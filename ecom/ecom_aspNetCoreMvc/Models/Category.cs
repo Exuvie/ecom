@@ -39,9 +39,15 @@ namespace ecom_aspNetCoreMvc.Models
             DataBase.Instance.connection.Open();
             if (command.ExecuteNonQuery() > 0)
             {
-                result = true;
+                request = "DELETE FROM Article WHERE idCategory = @id";
+                command = new SqlCommand(request, DataBase.Instance.connection);
+                command.Parameters.Add(new SqlParameter("@id", c.Id));
+                while (command.ExecuteNonQuery() > 0)
+                {
+                    result = true;
+                }
+                //result = true;
             }
-            //command.ExecuteNonQuery();
             DataBase.Instance.connection.Close();
             return result;
         }

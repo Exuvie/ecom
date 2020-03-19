@@ -1,7 +1,8 @@
 ﻿
 @{
-    ViewData["Title"] = "ArticleAdmin";
+    ViewData["Title"] = "EditArticle";
 }
+
 
 @model Article
 
@@ -64,36 +65,36 @@
     <div class="container">
         <div class="card">
             <div class="card-header text-center">
-                <h6>Ajouter un article</h6>
+                <h6>Modifier un article</h6>
             </div>
             <div class="card-body">
-                <form asp-controller="Article" asp-action="RegisterArticle" method="post" enctype="multipart/form-data">
+                <form asp-controller="Article" asp-action="EditArticlePost" method="put" enctype="multipart/form-data">
 
-                    <div class="input-group mb-3">
+                    @*<div class="input-group mb-3">
                         <div class="input-group-prepend">
                             <label class="input-group-text" for="inputGroupSelect01">Catégorie</label>
                         </div>
                         <select name="IdCategory" class="custom-select" id="inputGroupSelect01">
-                            <option selected>Aucune catégorie sélectionnée</option>
+                            <option selected>@Model.IdCategory</option>
                             @foreach (Category c in (ViewBag.Category as List<Category>))
                             {
                                 <option value="@c.Id">@c.Title</option>
                             }
                         </select>
-                    </div>
+                    </div>*@
 
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
                             <span class="input-group-text" id="basic-addon1">Titre</span>
                         </div>
-                        <input value="@if (Model != null) {@Model.Title}" name="Title" type="text" class="form-control" placeholder="Saisir le titre de l'article" aria-label="Username" aria-describedby="basic-addon1">
+                        <input value="@if (Model != null) {@Model.Title}" name="Title" type="text" class="form-control" placeholder="Saisir le titre de l'article" aria-label="Title" aria-describedby="basic-addon1">
                     </div>
 
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
                             <span class="input-group-text">Description</span>
                         </div>
-                        <textarea value="@if (Model != null) {@Model.Description}" name="Description" class="form-control" placeholder="Saisir la description de l'article" aria-label="With textarea"></textarea>
+                        <textarea value="@if (Model != null) {@Model.Description}" name="Description" type="text" class="form-control" placeholder="Saisir la description de l'article" aria-label="Description">@Model.Description</textarea>
                     </div>
 
                     <div class="input-group mb-3">
@@ -105,18 +106,18 @@
                             <span class="input-group-text">€</span>
                         </div>
                     </div>
-                    <div class="input-group mb-3">
+                    @*<div class="input-group mb-3">
                         <div class="input-group-prepend">
                             <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
                         </div>
                         <div class="custom-file">
-                            <input name="imageArticle" type="file" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01">
+                            <input value="@Model.UrlImage" name="imageArticle" type="file" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01">
                             <label class="custom-file-label" for="inputGroupFile01">Choisir un fichier image</label>
                         </div>
-                    </div>
+                    </div>*@
                     <div class="row">
                         <div class="col mb-1">
-                             <button class="btn btn-primary btn-block" type="submit">Valider</button>
+                            <button class="btn btn-primary btn-block" type="submit">Valider</button>
                         </div>
                     </div>
                 </form>
@@ -126,69 +127,7 @@
     </div>
 </section>
 
-<section class="m-4">
-    <div class="container">
-        <div class="card">
-            <div class="card-header text-center">
-                <h6>Liste des articles</h6>
-            </div>
-            <div class="card-body">
-                <form asp-controller="Article" asp-action="GetArticles" method="get">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <label class="input-group-text" for="inputGroupSelect01">Selectionner une catégorie</label>
-                        </div>
-                        <select name="idCategory" class="custom-select" id="inputGroupSelect01">
-                            <option selected>Aucune catégorie sélectionnée</option>
-                            @foreach (Category c in (ViewBag.Category as List<Category>))
-                            {
-                                <option value="@c.Id">@c.Title</option>
-                            }
-                        </select>
-                        <div class="input-group-append">
-                            <button class="btn btn-primary btn-block" type="submit">Rechercher</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="card-body">
-                <table class="table">
-                    <thead class="text-center">
-                        <tr>
-                            <th scope="col">Id</th>
-                            <th scope="col">Image</th>
-                            <th scope="col">Titre</th>
-                            <th scope="col">Description</th>
-                            <th scope="col">Prix</th>
-                            <th scope="col">Date d'ajout</th>
-                            <th scope="col">Supprimer</th>
-                            <th scope="col">Modifier</th>
-                        </tr>
-                    </thead>
-                    <tbody class="text-center">
-                        @foreach (Article a in (ViewBag.Article as List<Article>))
-                        {
-                        <tr>
-                            <th scope="row">@a.Id</th>
-                            <td>
-                                <img width="50" src="@a.UrlImage" />
-                            </td>
-                            <td>@a.Title</td>
-                            <td>@a.Description</td>
-                            <td>@a.Price</td>
-                            <td>@a.AddedDate</td>
-                            <td>
-                                <a asp-controller="Article" asp-action="RemoveArticle" asp-route-id="@a.Id">X</a>
-                            </td>
-                            <td>
-                                <a asp-controller="Article" asp-action="EditArticle" asp-route-id="@a.Id" class="btn btn-outline-warning">X</a>
-                            </td>
-                        </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</section>
+
+
+
 
