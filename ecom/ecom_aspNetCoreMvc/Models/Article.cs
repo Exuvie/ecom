@@ -33,7 +33,7 @@ namespace ecom_aspNetCoreMvc.Models
         {
         }
 
-        public Article(int Id,string Title, string Description, ?decimal Price)
+        public Article(int Id,string Title, string Description, decimal? Price)
         {
             id = Id;
             title = Title;
