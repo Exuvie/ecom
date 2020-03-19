@@ -150,7 +150,7 @@ namespace ecom_aspNetCoreMvc.Controllers
         //[HttpPut]
         public IActionResult EditArticlePost(Article a)
         {
-            Article articleEdit = new Article();
+            Article articleEdit = new Article(a.Id,a.Title,a.Description,a.Price) ;
             //articleEdit.Id = a.Id;
             if (articleEdit.Title != null && articleEdit.Description != null && articleEdit.Price != null)
             {

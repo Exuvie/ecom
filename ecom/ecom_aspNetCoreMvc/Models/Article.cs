@@ -33,6 +33,14 @@ namespace ecom_aspNetCoreMvc.Models
         {
         }
 
+        public Article(int Id,string Title, string Description, ?decimal Price)
+        {
+            id = Id;
+            title = Title;
+            description = Description;
+            price = Price;
+        }
+
         public void AddArticle(Article a)
         {
             request = "INSERT INTO Article (title, description, price, addDate, urlImage, idCategory) OUTPUT INSERTED.ID VALUES (@title, @description, @price, @addDate, @urlImage, @idCategory)";
