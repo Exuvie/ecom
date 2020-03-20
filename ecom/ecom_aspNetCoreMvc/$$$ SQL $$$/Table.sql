@@ -1,7 +1,7 @@
 ﻿DROP Table Article;
 DROP Table Cart;
 DROP Table CartArticle;
-DROP Table CaTegory;
+DROP Table Category;
 DROP Table Users;
 
 
@@ -13,6 +13,8 @@ CREATE TABLE [dbo].[Article] (
     [addDate]     DATETIME        NULL,
     [urlImage]    VARCHAR (MAX)   NULL,
     [idCategory]  INT             NULL,
+    [author]  VARCHAR (50)        NULL,
+    [edition]  VARCHAR (100)      NULL,
     PRIMARY KEY CLUSTERED ([Id] ASC)
 ); 
 
@@ -20,6 +22,7 @@ CREATE TABLE [dbo].[Cart] (
     [Id]     INT          IDENTITY (1, 1) NOT NULL,
     [userId] INT          NOT NULL,
     [total]  DECIMAL (10,2) NOT NULL,
+    [registerDate] DATETIME NOT NULL, 
     PRIMARY KEY CLUSTERED ([Id] ASC)
 ); 
 
