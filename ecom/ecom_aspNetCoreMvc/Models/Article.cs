@@ -16,6 +16,9 @@ namespace ecom_aspNetCoreMvc.Models
         private DateTime addedDate;
         private string urlImage;
         private int? idCategory;
+        private string author;
+        private string edition;
+
 
         private static string request;
         private static SqlCommand command;
@@ -28,29 +31,36 @@ namespace ecom_aspNetCoreMvc.Models
         public DateTime AddedDate { get => addedDate; set => addedDate = value; }
         public string UrlImage { get => urlImage; set => urlImage = value; }
         public int? IdCategory { get => idCategory; set => idCategory = value; }
+        public string Author { get => author; set => author = value; }
+        public string Edition { get => edition; set => edition = value; }
 
         public Article()
         {
         }
 
-        public Article(int Id,string Title, string Description, decimal? Price)
+        public Article(int Id, string Title, string Description, decimal? Price, string UrlImage, string Author, string Edition)
         {
             id = Id;
             title = Title;
             description = Description;
             price = Price;
+            urlImage = UrlImage;
+            author = Author;
+            edition = Edition;
         }
 
         public void AddArticle(Article a)
         {
-            request = "INSERT INTO Article (title, description, price, addDate, urlImage, idCategory) OUTPUT INSERTED.ID VALUES (@title, @description, @price, @addDate, @urlImage, @idCategory)";
+            request = "INSERT INTO Article (title, description, price, addDate, urlImage, idCategory, author, edition) OUTPUT INSERTED.ID VALUES (@title, @description, @price, @addDate, @urlImage, @idCategory, @author, @edition)";
             command = new SqlCommand(request, DataBase.Instance.connection);
             command.Parameters.Add(new SqlParameter("@title", a.Title));
             command.Parameters.Add(new SqlParameter("@description", a.Description));
             command.Parameters.Add(new SqlParameter("@price", a.Price));
             command.Parameters.Add(new SqlParameter("@addDate", DateTime.Now));
             command.Parameters.Add(new SqlParameter("@urlImage", a.UrlImage));
-            command.Parameters.Add(new SqlParameter("@idCategory", a.idCategory));
+            command.Parameters.Add(new SqlParameter("@idCategory", a.IdCategory));
+            command.Parameters.Add(new SqlParameter("@author", a.Author));
+            command.Parameters.Add(new SqlParameter("@edition", a.Edition));
             DataBase.Instance.connection.Open();
             a.Id = (int)command.ExecuteScalar();
             command.Dispose();
@@ -84,6 +94,8 @@ namespace ecom_aspNetCoreMvc.Models
                     AddedDate = reader.GetDateTime(4),
                     urlImage = reader.GetString(5),
                     IdCategory = reader.GetInt32(6),
+                    Author = reader.GetString(7),
+                    Edition = reader.GetString(8)
                 };
                 articles.Add(a);
             }
@@ -96,7 +108,7 @@ namespace ecom_aspNetCoreMvc.Models
         public static Article GetArticleById(int id)
         {
             Article a = null;
-            request = "SELECT id, title, description, price, addDate, urlImage, idCategory FROM Article WHERE id = @id";
+            request = "SELECT id, title, description, price, addDate, urlImage, idCategory, author, edition FROM Article WHERE id = @id";
             command = new SqlCommand(request, DataBase.Instance.connection);
             command.Parameters.Add(new SqlParameter("@id", id));
             DataBase.Instance.connection.Open();
@@ -112,6 +124,8 @@ namespace ecom_aspNetCoreMvc.Models
                     AddedDate = reader.GetDateTime(4),
                     urlImage = reader.GetString(5),
                     IdCategory = reader.GetInt32(6),
+                    Author = reader.GetString(7),
+                    Edition = reader.GetString(8)
                 };
             }
             reader.Close();
@@ -123,7 +137,7 @@ namespace ecom_aspNetCoreMvc.Models
         public static List<Article> GetArticles()
         {
             List<Article> articles = new List<Article>();
-            request = "SELECT id, title, description, price, addDate, urlImage, idCategory FROM Article";
+            request = "SELECT id, title, description, price, addDate, urlImage, idCategory, author, edition FROM Article";
             command = new SqlCommand(request, DataBase.Instance.connection);
             DataBase.Instance.connection.Open();
             reader = command.ExecuteReader();
@@ -138,6 +152,8 @@ namespace ecom_aspNetCoreMvc.Models
                     AddedDate = reader.GetDateTime(4),
                     urlImage = reader.GetString(5),
                     IdCategory = reader.GetInt32(6),
+                    Author = reader.GetString(7),
+                    Edition = reader.GetString(8)
                 };
                 articles.Add(a);
             }
@@ -159,12 +175,15 @@ namespace ecom_aspNetCoreMvc.Models
 
         public void UpdateArticle(Article a)
         {
-            request = "UPDATE Article SET title = @title, description = @description, price = @price, addDate = @addDate WHERE id = @id";
+            request = "UPDATE Article SET title = @title, description = @description, price = @price, addDate = @addDate, urlImage = @urlImage, author = @author, edition = @edition WHERE id = @id";
             command = new SqlCommand(request, DataBase.Instance.connection);
             command.Parameters.Add(new SqlParameter("@title", a.Title));
             command.Parameters.Add(new SqlParameter("@description", a.Description));
             command.Parameters.Add(new SqlParameter("@price", a.Price));
             command.Parameters.Add(new SqlParameter("@addDate", DateTime.Now));
+            command.Parameters.Add(new SqlParameter("@urlImage", a.UrlImage));
+            command.Parameters.Add(new SqlParameter("@author", a.Author));
+            command.Parameters.Add(new SqlParameter("@edition", a.Edition));
             command.Parameters.Add(new SqlParameter("@id", a.Id));
             DataBase.Instance.connection.Open();
             command.ExecuteNonQuery();

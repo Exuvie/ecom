@@ -49,11 +49,11 @@ namespace ecom_aspNetCoreMvc.Controllers
 
 
         [HttpPost]
-        public IActionResult RegisterArticle(string title, string description, decimal? price, int? idCategory, IFormFile imageArticle)
+        public IActionResult RegisterArticle(string title, string description, decimal? price, int? idCategory, string author, string edition, IFormFile imageArticle)
         {
             UserConnect(ViewBag);
             List<string> message = new List<string>();
-            Article a = new Article { Title = title, Description = description, Price = price, IdCategory = idCategory };
+            Article a = new Article { Title = title, Description = description, Price = price, IdCategory = idCategory, Author = author, Edition = edition };
             if (idCategory == null)
             {
                 message.Add("Merci de saisir une catégorie");
@@ -74,6 +74,14 @@ namespace ecom_aspNetCoreMvc.Controllers
             {
                 //a.UrlImage = "images/default.png";
                 message.Add("Merci de selectionner une image");
+            }
+            if (author == null)
+            {
+                message.Add("Merci de saisir un auteur");
+            }
+            if (edition == null)
+            {
+                message.Add("Merci de saisir l'éditeur");
             }
             if (message.Count > 0)
             {
@@ -105,7 +113,7 @@ namespace ecom_aspNetCoreMvc.Controllers
                 {
                     c.UrlImage = $"{Request.Scheme}://{Request.Host.Value}/{c.UrlImage}";
                 });
-                
+
             }
             return View("ArticleAdmin");
         }
@@ -124,7 +132,6 @@ namespace ecom_aspNetCoreMvc.Controllers
             return View("ArticleAdmin");
         }
 
-        [HttpDelete]
         public IActionResult RemoveArticle(Article a)
         {
             UserConnect(ViewBag);
@@ -147,31 +154,25 @@ namespace ecom_aspNetCoreMvc.Controllers
             return View("EditArticle", Article.GetArticleById(id));
         }
 
-        //[HttpPut]
-        public IActionResult EditArticlePost(Article a)
+        public IActionResult EditArticlePost(Article a, IFormFile imageArticle)
         {
-            Article articleEdit = new Article(a.Id,a.Title,a.Description,a.Price) ;
-            //articleEdit.Id = a.Id;
-            if (articleEdit.Title != null && articleEdit.Description != null && articleEdit.Price != null)
+            Article editArticle = new Article(a.Id, a.Title, a.Description, a.Price, a.UrlImage, a.Author, a.Edition);
+
+            if (imageArticle != null)
             {
-                a.UpdateArticle(a);
+                string img = Guid.NewGuid().ToString() + "-" + imageArticle.FileName;
+                string pathToUpload = Path.Combine(_env.WebRootPath, "images", img);
+                FileStream stream = System.IO.File.Create(pathToUpload);
+                imageArticle.CopyTo(stream);
+                stream.Close();
+                editArticle.UrlImage = "images/" + img;
             }
-            //if (articleEdit.Title != null)
-            //{
-            //    a.Title = articleEdit.Title;
-            //}
-            //if (articleEdit.Description != null)
-            //{
-            //    a.Description = articleEdit.Description;
-            //}
-            //if (articleEdit.Price != null)
-            //{
-            //    a.Price = articleEdit.Price;
-            //}
-            //if (a.UpdateArticle(a))
-            //{
-            //}   
-            //return RedirectToAction("ArticleAdmin");
+            else
+            {
+                editArticle.UrlImage = a.UrlImage;
+                //editArticle.UrlImage = $"{Request.Scheme}://{Request.Host.Value}/{a.UrlImage}";
+            }
+            a.UpdateArticle(editArticle);
             return RedirectToRoute(new { controller = "Article", action = "ArticleAdmin" });
         }
     }

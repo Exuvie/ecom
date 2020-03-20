@@ -68,7 +68,7 @@
                 <h6>Modifier un article</h6>
             </div>
             <div class="card-body">
-                <form asp-controller="Article" asp-action="EditArticlePost" method="put" enctype="multipart/form-data">
+                <form asp-controller="Article" asp-action="EditArticlePost" method="post" enctype="multipart/form-data">
 
                     @*<div class="input-group mb-3">
             <div class="input-group-prepend">
@@ -84,42 +84,67 @@
         </div>*@
                     <div class="input-group mb-1">
                         <div class="input-group-prepend">
-                            <span class="input-group-text" id="basic-addon1">Titre</span>
+                            <span class="input-group-text" id="basic-addon1">Identifiant</span>
                         </div>
-                        <input value="@if (Model != null) {@Model.Id}" name="Id" type="text" class="form-control" aria-label="Id" aria-describedby="basic-addon1">
+                        <input value="@Model.Id" name="Id" type="text" class="form-control" aria-label="Id" aria-describedby="basic-addon1">
                     </div>
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
                             <span class="input-group-text" id="basic-addon1">Titre</span>
                         </div>
-                        <input value="@if (Model != null) {@Model.Title}" name="Title" type="text" class="form-control" placeholder="Saisir le titre de l'article" aria-label="Title" aria-describedby="basic-addon1">
+                        <input value="@Model.Title" name="Title" type="text" class="form-control" placeholder="Saisir le titre de l'article" aria-label="Title" aria-describedby="basic-addon1">
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1">Auteur</span>
+                        </div>
+                        <input value="@Model.Author" name="Author" type="text" class="form-control" placeholder="Saisir un auteur" aria-label="Author" aria-describedby="basic-addon1">
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1">Edition</span>
+                        </div>
+                        <input value="@Model.Edition" name="Edition" type="text" class="form-control" placeholder="Saisir un éditeur" aria-label="Edition" aria-describedby="basic-addon1">
                     </div>
 
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
                             <span class="input-group-text">Description</span>
                         </div>
-                        <textarea value="@if (Model != null) {@Model.Description}" name="Description" type="text" class="form-control" placeholder="Saisir la description de l'article" aria-label="Description">@Model.Description</textarea>
+                        <textarea value="@Model.Description" name="Description" type="text" class="form-control" placeholder="Saisir la description de l'article" aria-label="Description">@Model.Description</textarea>
                     </div>
 
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
                             <span class="input-group-text">Prix</span>
                         </div>
-                        <input value="@if (Model != null) {@Model.Price}" name="Price" type="text" placeholder="Saisir le prix de l'article" class="form-control" aria-label="Amount (to the nearest dollar)">
+                        <input value="@Model.Price" name="Price" type="text" placeholder="Saisir le prix de l'article" class="form-control" aria-label="Amount (to the nearest dollar)">
                         <div class="input-group-append">
                             <span class="input-group-text">€</span>
                         </div>
                     </div>
-                    @*<div class="input-group mb-3">
-            <div class="input-group-prepend">
-                <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
-            </div>
-            <div class="custom-file">
-                <input value="@Model.UrlImage" name="imageArticle" type="file" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01">
-                <label class="custom-file-label" for="inputGroupFile01">Choisir un fichier image</label>
-            </div>
-        </div>*@
+
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">image</span>
+                        </div>
+                        <input value="@Model.UrlImage" name="UrlImage" type="text" placeholder="image" class="form-control" aria-label="Amount (to the nearest dollar)">
+                        <div class="input-group-append">
+                            <span class="input-group-text">€</span>
+                        </div>
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="inputGroupFileAddon01">Image</span>
+                        </div>
+                        <div class="custom-file">
+                            <input value="@Model.UrlImage" name="imageArticle" type="file" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01">
+                            <label class="custom-file-label" for="inputGroupFile01">Choisir un fichier image</label>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col mb-1">
                             <button class="btn btn-primary btn-block" type="submit">Valider</button>

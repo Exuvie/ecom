@@ -86,21 +86,35 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text" id="basic-addon1">Titre</span>
                         </div>
-                        <input value="@if (Model != null) {@Model.Title}" name="Title" type="text" class="form-control" placeholder="Saisir le titre de l'article" aria-label="Username" aria-describedby="basic-addon1">
+                        <input value="@if (Model != null) {@Model.Title}" name="Title" type="text" class="form-control" placeholder="Saisir le titre de l'article" aria-label="Title" aria-describedby="basic-addon1">
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1">Auteur</span>
+                        </div>
+                        <input value="@if (Model != null) {@Model.Author}" name="Author" type="text" class="form-control" placeholder="Saisir un auteur" aria-label="Author" aria-describedby="basic-addon1">
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1">Edition</span>
+                        </div>
+                        <input value="@if (Model != null) {@Model.Edition}" name="Edition" type="text" class="form-control" placeholder="Saisir un éditeur" aria-label="Edition" aria-describedby="basic-addon1">
                     </div>
 
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
                             <span class="input-group-text">Description</span>
                         </div>
-                        <textarea value="@if (Model != null) {@Model.Description}" name="Description" class="form-control" placeholder="Saisir la description de l'article" aria-label="With textarea"></textarea>
+                        <textarea value="@if (Model != null) {@Model.Description}" name="Description" class="form-control" placeholder="Saisir la description de l'article" aria-label="Description"></textarea>
                     </div>
 
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
                             <span class="input-group-text">Prix</span>
                         </div>
-                        <input value="@if (Model != null) {@Model.Price}" name="Price" type="text" placeholder="Saisir le prix de l'article" class="form-control" aria-label="Amount (to the nearest dollar)">
+                        <input value="@if (Model != null) {@Model.Price}" name="Price" type="text" placeholder="Saisir le prix de l'article" class="form-control" aria-label="Price">
                         <div class="input-group-append">
                             <span class="input-group-text">€</span>
                         </div>
@@ -116,7 +130,7 @@
                     </div>
                     <div class="row">
                         <div class="col mb-1">
-                             <button class="btn btn-primary btn-block" type="submit">Valider</button>
+                            <button class="btn btn-primary btn-block" type="submit">Valider</button>
                         </div>
                     </div>
                 </form>
@@ -158,6 +172,8 @@
                             <th scope="col">Id</th>
                             <th scope="col">Image</th>
                             <th scope="col">Titre</th>
+                            <th scope="col">Auteur</th>
+                            <th scope="col">Edition</th>
                             <th scope="col">Description</th>
                             <th scope="col">Prix</th>
                             <th scope="col">Date d'ajout</th>
@@ -174,6 +190,8 @@
                                 <img width="50" src="@a.UrlImage" />
                             </td>
                             <td>@a.Title</td>
+                            <td>@a.Author</td>
+                            <td>@a.Edition</td>
                             <td>@a.Description</td>
                             <td>@a.Price</td>
                             <td>@a.AddedDate</td>
